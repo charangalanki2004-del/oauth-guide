@@ -6,7 +6,10 @@ Before an AI agent's users can connect an app, the developer often has to regist
 - **Live investigation**: type a name or website and watch an agent find the developer docs, read them, probe what it can, and write a shareable guide.
 - Every guide is a **structured object** with evidence tiers, not prose, so guides are comparable and auditable.
 
-Live demo: `<your deploy URL>` · Guides: `/guides/<slug>` · Markdown export: `/guides/<slug>.md`
+**Live demo:** https://oauth-guide.onrender.com · **Source:** https://github.com/charangalanki2004-del/oauth-guide
+Guides: `/guides/<slug>` (e.g. [/guides/github](https://oauth-guide.onrender.com/guides/github)) · Markdown export: `/guides/<slug>.md` · JSON: `/api/guides/<slug>`
+
+Hosted on Render's free tier: the first request after idle takes ~30 s to wake the service, and a live investigation takes 40–100 s on the free Groq model.
 
 ## Setup
 
