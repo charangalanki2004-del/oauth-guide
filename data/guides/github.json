@@ -1,0 +1,240 @@
+{
+  "slug": "github",
+  "name": "GitHub",
+  "website": "https://github.com",
+  "category": "developer",
+  "developer_portal_url": "https://github.com/settings/developers",
+  "summary": "GitHub supports OAuth2 with standard authorization code and device flows; creating an OAuth App is straightforward via the user settings, no review is required.",
+  "oauth_supported": true,
+  "auth_methods": [
+    "oauth2"
+  ],
+  "oauth_note": {
+    "text": "Supports web application flow (authorization code grant) and device flow; implicit grant not supported; optional expiring tokens with offline_access scope.",
+    "evidence": "sourced",
+    "source_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps"
+  },
+  "app_types": [
+    {
+      "name": "OAuth App",
+      "when_to_use": "When you need a user‑centred integration that uses GitHub OAuth scopes.",
+      "recommended_for_agents": true
+    },
+    {
+      "name": "GitHub App",
+      "when_to_use": "When you prefer fine‑grained permissions, short‑lived tokens, or need to act without a user.",
+      "recommended_for_agents": false
+    }
+  ],
+  "registration_access": "anyone",
+  "registration_access_claim": {
+    "text": "Any logged‑in GitHub user can create an OAuth app in their personal account settings.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "prerequisites": [
+    {
+      "text": "A GitHub account (free tier is sufficient).",
+      "evidence": "inferred",
+      "source_url": null
+    }
+  ],
+  "steps": [
+    {
+      "title": "Open developer settings",
+      "detail": "Log into GitHub, click your profile picture → Settings → Developer settings → OAuth Apps.",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Create a new OAuth app",
+      "detail": "Click “New OAuth App”, fill in Application name, Homepage URL, and Authorization callback URL (redirect URI).",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Save client credentials",
+      "detail": "After creation, note the Client ID and Client Secret displayed on the app page.",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Configure scopes (optional)",
+      "detail": "Decide which OAuth scopes your app needs (e.g., repo, user, offline_access) and document them for users.",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Implement authorization flow",
+      "detail": "Build the authorization URL: https://github.com/login/oauth/authorize?client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&scope=SCOPES&state=RANDOM. Exchange the returned code at https://github.com/login/oauth/access_token.",
+      "actor": "agent",
+      "evidence": "sourced",
+      "source_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps"
+    },
+    {
+      "title": "Handle token expiration (optional)",
+      "detail": "If you request offline_access, GitHub will return an expiring access token (8 h) and a refresh token (6 months idle). Use the refresh token endpoint to obtain new tokens.",
+      "actor": "agent",
+      "evidence": "sourced",
+      "source_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps"
+    }
+  ],
+  "approval_gate": "none",
+  "approval_claim": {
+    "text": "No review or marketplace approval is required for OAuth apps; they become usable immediately after creation.",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "unreviewed_limits": {
+    "text": "OAuth apps can be used by any user without prior approval; rate limits apply per user token as per GitHub API docs.",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "review_artifacts": [],
+  "approval_wait": {
+    "min_days": null,
+    "max_days": null,
+    "evidence": "unknown",
+    "source_url": null,
+    "note": "Docs do not mention any review waiting period."
+  },
+  "setup_time": {
+    "min_minutes": 15,
+    "max_minutes": 60,
+    "evidence": "inferred",
+    "source_url": null,
+    "note": "Typical time to create app and copy credentials."
+  },
+  "redirect_uri_rules": {
+    "text": "Redirect URI must be an exact match to the one registered; HTTPS required for production, localhost allowed for development.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "token_lifecycle": {
+    "text": "Standard tokens are long‑lived unless expiring tokens are enabled; expiring access token lives 8 hours, refresh token lives 6 months without use.",
+    "evidence": "sourced",
+    "source_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps"
+  },
+  "scopes_note": {
+    "text": "Scopes are space‑separated in the `scope` parameter; request `offline_access` to receive refresh tokens; no incremental auth documented.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "instance_specific": {
+    "text": "",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "pkce_required": {
+    "text": "Not mentioned in the official docs; support is unclear.",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "blockers": [
+    {
+      "blocker": "Not logged into GitHub",
+      "fix": "Log in with a GitHub account before accessing the developer portal.",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "blocker": "Redirect URI mismatch",
+      "fix": "Ensure the exact URL (including scheme, host, path) is registered in the app settings.",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "blocker": "Missing client secret exposure",
+      "fix": "Store the client secret securely (e.g., env var, secret manager).",
+      "evidence": "sourced",
+      "source_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/best-practices-for-creating-an-oauth-app"
+    },
+    {
+      "blocker": "Attempting implicit grant",
+      "fix": "Use the authorization code flow; implicit grant is not supported.",
+      "evidence": "sourced",
+      "source_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps"
+    },
+    {
+      "blocker": "Expecting refresh token without offline_access",
+      "fix": "Include `offline_access` scope to receive refresh token when expiring tokens are enabled.",
+      "evidence": "sourced",
+      "source_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps"
+    }
+  ],
+  "agent_can": [
+    "generate authorization URL",
+    "exchange authorization code for access token",
+    "refresh expiring access tokens",
+    "parse user ID from /user endpoint"
+  ],
+  "human_must": [
+    "log into GitHub",
+    "create the OAuth app in settings",
+    "enter redirect URI and scopes",
+    "store client secret securely",
+    "accept any terms of service when creating the app"
+  ],
+  "composio_managed": null,
+  "composio_note": "Composio has a 'github' toolkit (https://docs.composio.dev/kb/toolkit/github). Composio's own OAuth credential guide for it: https://composio.dev/auth/github. When registering, use the redirect URI shown in your Composio auth config.",
+  "sources": [
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+      "title": "Authorizing OAuth apps - GitHub Docs",
+      "fetched_at": "2026-10-21T18:28:53.491068+00:00",
+      "official": true
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-a-custom-badge-for-your-oauth-app",
+      "title": "Creating a custom badge for your OAuth app - GitHub Docs",
+      "fetched_at": "2026-10-21T18:28:54.070553+00:00",
+      "official": true
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/best-practices-for-creating-an-oauth-app",
+      "title": "Best practices for creating an OAuth app - GitHub Docs",
+      "fetched_at": "2026-10-21T18:28:54.689935+00:00",
+      "official": true
+    }
+  ],
+  "agent_attempts": [
+    {
+      "action": "GET /.well-known/openid-configuration on github.com, githubusercontent.com",
+      "result": "No discovery document. Normal for many providers; endpoints must come from docs.",
+      "ok": false
+    },
+    {
+      "action": "GET https://github.com/settings/developers",
+      "result": "HTTP 200, redirects to a login page (github.com). Portal exists; needs a human session.",
+      "ok": true
+    },
+    {
+      "action": "GET https://docs.composio.dev/kb/toolkit/github",
+      "result": "HTTP 200: Composio toolkit exists, with an OAuth setup guide.",
+      "ok": true
+    }
+  ],
+  "unverified_claims": [
+    "Exact HTTPS‑only requirement for redirect URIs",
+    "Whether PKCE is required or optional",
+    "Any rate‑limit differences for OAuth apps vs GitHub Apps",
+    "If any marketplace listing is needed for public distribution"
+  ],
+  "tested_notes": [],
+  "confidence": "low",
+  "difficulty": {
+    "score": 0.0,
+    "level": 1,
+    "label": "Trivial",
+    "reasons": [
+      "No review needed for private use"
+    ]
+  },
+  "generated_at": "2026-10-21T18:29:22.017948+00:00",
+  "generator": "groq:openai/gpt-oss-120b",
+  "input_query": "https://github.com"
+}

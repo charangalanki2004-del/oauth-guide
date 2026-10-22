@@ -1,0 +1,235 @@
+{
+  "slug": "quickbooks-online",
+  "name": "QuickBooks Online",
+  "website": "https://quickbooks.intuit.com",
+  "category": "finance",
+  "developer_portal_url": "https://developer.intuit.com/app/developer/qbo",
+  "summary": "QuickBooks uses OAuth 2.0; you must create an app in the Intuit Developer Portal, set redirect URIs, and exchange the auth code for tokens. The main gate is creating the app and selecting the QuickBooks Online Accounting scope.",
+  "oauth_supported": true,
+  "auth_methods": [
+    "oauth2"
+  ],
+  "oauth_note": {
+    "text": "Supports standard OAuth 2.0 authorization code flow (with optional PKCE) and OpenID Connect extensions.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "app_types": [
+    {
+      "name": "OAuth App",
+      "when_to_use": "Any integration that needs to call QuickBooks Online APIs on behalf of a user",
+      "recommended_for_agents": true
+    }
+  ],
+  "registration_access": "anyone",
+  "registration_access_claim": {
+    "text": "Anyone can sign in to the Intuit Developer Portal and create an app.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "prerequisites": [
+    {
+      "text": "Intuit developer account (sign‑in at https://developer.intuit.com/dashboard)",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "text": "Select the QuickBooks Online Accounting scope when creating the app",
+      "evidence": "inferred",
+      "source_url": null
+    }
+  ],
+  "steps": [
+    {
+      "title": "Sign in to the Intuit Developer Portal",
+      "detail": "Go to https://developer.intuit.com/dashboard and log in with your Intuit credentials.",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Create a new app",
+      "detail": "Click “Create an app”, give it a name, and choose “QuickBooks Online Accounting” as the scope.",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Add redirect URIs",
+      "detail": "In the app settings, under “Set app redirect URIs”, enter the HTTPS URL(s) your agent will use to receive the auth code (exact match required).",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Copy client ID and client secret",
+      "detail": "After saving, note the generated client ID and client secret; they will be used to build the authorization URL and token request.",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Build the authorization URL",
+      "detail": "Use the OAuth 2.0 endpoint https://appcenter.intuit.com/connect/oauth2 with response_type=code, client_id, redirect_uri, scope (e.g. com.intuit.quickbooks.accounting), and optional code_challenge for PKCE.",
+      "actor": "agent",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Exchange code for tokens",
+      "detail": "POST to https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer with grant_type=authorization_code, code, redirect_uri, client_id, client_secret (or PKCE verifier). Store access and refresh tokens.",
+      "actor": "agent",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Test with the OAuth Playground (optional)",
+      "detail": "Open https://developer.intuit.com/app/developer/playground and run through the flow using your app’s credentials to verify tokens.",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    }
+  ],
+  "approval_gate": "unknown",
+  "approval_claim": {
+    "text": "The provided docs do not describe a review or approval step for publishing an app.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "unreviewed_limits": {
+    "text": "You can use sandbox companies and the OAuth Playground without any review; production calls work once you have valid client credentials.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "review_artifacts": [],
+  "approval_wait": {
+    "min_days": null,
+    "max_days": null,
+    "evidence": "unknown",
+    "source_url": null,
+    "note": "Docs do not mention a review timeline."
+  },
+  "setup_time": {
+    "min_minutes": 15,
+    "max_minutes": 60,
+    "evidence": "inferred",
+    "source_url": null,
+    "note": null
+  },
+  "redirect_uri_rules": {
+    "text": "Must be HTTPS (except localhost for development); the URI must match exactly one of the entries in the app’s redirect list.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "token_lifecycle": {
+    "text": "Access tokens are short‑lived (typically 1 hour); refresh tokens are long‑lived and can be used to obtain new access tokens. Refresh tokens can be revoked via the developer portal.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "scopes_note": {
+    "text": "Scopes are identified by strings like com.intuit.quickbooks.accounting; select the QuickBooks Online Accounting scope when creating the app. No incremental auth documented.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "instance_specific": {
+    "text": "",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "pkce_required": {
+    "text": "PKCE is supported but not required; recommended for public clients.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "blockers": [
+    {
+      "blocker": "Missing HTTPS redirect URI",
+      "fix": "Add an HTTPS URL to the app’s redirect list; localhost is only allowed for testing.",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "blocker": "Using TLS 1.0/1.1",
+      "fix": "Upgrade to TLS 1.2 or higher as TLS 1.0/1.1 are deprecated.",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "blocker": "Incorrect scope string",
+      "fix": "Use the exact scope name provided (e.g., com.intuit.quickbooks.accounting).",
+      "evidence": "inferred",
+      "source_url": null
+    }
+  ],
+  "agent_can": [
+    "generate OAuth authorization URL",
+    "exchange authorization code for access/refresh tokens",
+    "refresh access tokens",
+    "validate token expiry",
+    "store credentials for later API calls"
+  ],
+  "human_must": [
+    "log in to the Intuit Developer Portal",
+    "create the app and set redirect URIs",
+    "accept Intuit terms of service",
+    "obtain client secret (cannot be retrieved programmatically)"
+  ],
+  "composio_managed": null,
+  "composio_note": "Composio has a 'quickbooks' toolkit (https://docs.composio.dev/kb/toolkit/quickbooks).",
+  "sources": [
+    {
+      "url": "https://developer.intuit.com/app/developer/qbo/docs/develop/authentication-and-authorization/oauth-2.0",
+      "title": "Set up OAuth 2.0 · QuickBooks Online",
+      "fetched_at": "2026-10-21T18:55:12.316210+00:00",
+      "official": true
+    },
+    {
+      "url": "https://developer.intuit.com/app/developer/qbo/docs/go-live/publish-app/technical-requirements",
+      "title": "Intuit Developer",
+      "fetched_at": "2026-10-21T18:55:34.860112+00:00",
+      "official": true
+    },
+    {
+      "url": "https://developer.intuit.com/app/developer/qbo/docs/develop",
+      "title": "Develop · QuickBooks Online",
+      "fetched_at": "2026-10-21T18:55:53.461401+00:00",
+      "official": true
+    }
+  ],
+  "agent_attempts": [
+    {
+      "action": "GET /.well-known/openid-configuration on intuit.com",
+      "result": "No discovery document. Normal for many providers; endpoints must come from docs.",
+      "ok": false
+    },
+    {
+      "action": "GET https://developer.intuit.com/app/developer/qbo",
+      "result": "HTTP 404",
+      "ok": false
+    },
+    {
+      "action": "GET https://docs.composio.dev/kb/toolkit/quickbooks",
+      "result": "HTTP 200: Composio toolkit exists.",
+      "ok": true
+    }
+  ],
+  "unverified_claims": [
+    "Exact token expiration times",
+    "Whether a formal app review is required for production publishing",
+    "Any marketplace listing requirements"
+  ],
+  "tested_notes": [],
+  "confidence": "low",
+  "difficulty": {
+    "score": 1.5,
+    "level": 2,
+    "label": "Easy",
+    "reasons": [
+      "Approval requirements could not be confirmed",
+      "Token lifecycle has traps"
+    ]
+  },
+  "generated_at": "2026-10-21T18:56:07.324507+00:00",
+  "generator": "groq:openai/gpt-oss-120b",
+  "input_query": "https://quickbooks.intuit.com"
+}

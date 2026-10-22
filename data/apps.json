@@ -1,0 +1,612 @@
+[
+ {
+  "name": "Google Workspace",
+  "slug": "google-workspace",
+  "website": "https://workspace.google.com",
+  "category": "productivity",
+  "search_hints": [
+   "Google Cloud console OAuth consent screen app verification sensitive restricted scopes testing users",
+   "developers.google.com OAuth 2.0 create client ID web application"
+  ]
+ },
+ {
+  "name": "Notion",
+  "slug": "notion",
+  "website": "https://notion.so",
+  "category": "productivity"
+ },
+ {
+  "name": "Microsoft 365",
+  "slug": "microsoft-365",
+  "website": "https://microsoft.com/microsoft-365",
+  "category": "productivity",
+  "search_hints": [
+   "Microsoft Entra app registration redirect URI admin consent publisher verification"
+  ]
+ },
+ {
+  "name": "Slack",
+  "slug": "slack",
+  "website": "https://slack.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Asana",
+  "slug": "asana",
+  "website": "https://asana.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Trello",
+  "slug": "trello",
+  "website": "https://trello.com",
+  "category": "productivity"
+ },
+ {
+  "name": "monday.com",
+  "slug": "monday-com",
+  "website": "https://monday.com",
+  "category": "productivity"
+ },
+ {
+  "name": "ClickUp",
+  "slug": "clickup",
+  "website": "https://clickup.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Todoist",
+  "slug": "todoist",
+  "website": "https://todoist.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Airtable",
+  "slug": "airtable",
+  "website": "https://airtable.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Coda",
+  "slug": "coda",
+  "website": "https://coda.io",
+  "category": "productivity"
+ },
+ {
+  "name": "Evernote",
+  "slug": "evernote",
+  "website": "https://evernote.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Calendly",
+  "slug": "calendly",
+  "website": "https://calendly.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Zoom",
+  "slug": "zoom",
+  "website": "https://zoom.us",
+  "category": "productivity"
+ },
+ {
+  "name": "Miro",
+  "slug": "miro",
+  "website": "https://miro.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Smartsheet",
+  "slug": "smartsheet",
+  "website": "https://smartsheet.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Basecamp",
+  "slug": "basecamp",
+  "website": "https://basecamp.com",
+  "category": "productivity"
+ },
+ {
+  "name": "Confluence",
+  "slug": "confluence",
+  "website": "https://atlassian.com/software/confluence",
+  "category": "productivity"
+ },
+ {
+  "name": "Jira",
+  "slug": "jira",
+  "website": "https://atlassian.com/software/jira",
+  "category": "productivity"
+ },
+ {
+  "name": "Linear",
+  "slug": "linear",
+  "website": "https://linear.app",
+  "category": "productivity"
+ },
+ {
+  "name": "Salesforce",
+  "slug": "salesforce",
+  "website": "https://salesforce.com",
+  "category": "crm"
+ },
+ {
+  "name": "HubSpot",
+  "slug": "hubspot",
+  "website": "https://hubspot.com",
+  "category": "crm"
+ },
+ {
+  "name": "Pipedrive",
+  "slug": "pipedrive",
+  "website": "https://pipedrive.com",
+  "category": "crm"
+ },
+ {
+  "name": "Zoho CRM",
+  "slug": "zoho-crm",
+  "website": "https://zoho.com/crm",
+  "category": "crm"
+ },
+ {
+  "name": "Close",
+  "slug": "close",
+  "website": "https://close.com",
+  "category": "crm"
+ },
+ {
+  "name": "Copper",
+  "slug": "copper",
+  "website": "https://copper.com",
+  "category": "crm"
+ },
+ {
+  "name": "Attio",
+  "slug": "attio",
+  "website": "https://attio.com",
+  "category": "crm"
+ },
+ {
+  "name": "Freshsales",
+  "slug": "freshsales",
+  "website": "https://freshworks.com/crm",
+  "category": "crm"
+ },
+ {
+  "name": "Gmail",
+  "slug": "gmail",
+  "website": "https://gmail.com",
+  "category": "communication"
+ },
+ {
+  "name": "Microsoft Outlook",
+  "slug": "microsoft-outlook",
+  "website": "https://outlook.com",
+  "category": "communication"
+ },
+ {
+  "name": "Discord",
+  "slug": "discord",
+  "website": "https://discord.com",
+  "category": "communication"
+ },
+ {
+  "name": "Microsoft Teams",
+  "slug": "microsoft-teams",
+  "website": "https://microsoft.com/microsoft-teams",
+  "category": "communication"
+ },
+ {
+  "name": "Twilio",
+  "slug": "twilio",
+  "website": "https://twilio.com",
+  "category": "communication"
+ },
+ {
+  "name": "Intercom",
+  "slug": "intercom",
+  "website": "https://intercom.com",
+  "category": "communication"
+ },
+ {
+  "name": "Front",
+  "slug": "front",
+  "website": "https://front.com",
+  "category": "communication"
+ },
+ {
+  "name": "Mailchimp",
+  "slug": "mailchimp",
+  "website": "https://mailchimp.com",
+  "category": "communication"
+ },
+ {
+  "name": "SendGrid",
+  "slug": "sendgrid",
+  "website": "https://sendgrid.com",
+  "category": "communication"
+ },
+ {
+  "name": "GitHub",
+  "slug": "github",
+  "website": "https://github.com",
+  "category": "developer"
+ },
+ {
+  "name": "GitLab",
+  "slug": "gitlab",
+  "website": "https://gitlab.com",
+  "category": "developer"
+ },
+ {
+  "name": "Bitbucket",
+  "slug": "bitbucket",
+  "website": "https://bitbucket.org",
+  "category": "developer"
+ },
+ {
+  "name": "Vercel",
+  "slug": "vercel",
+  "website": "https://vercel.com",
+  "category": "developer"
+ },
+ {
+  "name": "Netlify",
+  "slug": "netlify",
+  "website": "https://netlify.com",
+  "category": "developer"
+ },
+ {
+  "name": "Heroku",
+  "slug": "heroku",
+  "website": "https://heroku.com",
+  "category": "developer"
+ },
+ {
+  "name": "DigitalOcean",
+  "slug": "digitalocean",
+  "website": "https://digitalocean.com",
+  "category": "developer"
+ },
+ {
+  "name": "Sentry",
+  "slug": "sentry",
+  "website": "https://sentry.io",
+  "category": "developer"
+ },
+ {
+  "name": "PagerDuty",
+  "slug": "pagerduty",
+  "website": "https://pagerduty.com",
+  "category": "developer"
+ },
+ {
+  "name": "Datadog",
+  "slug": "datadog",
+  "website": "https://datadoghq.com",
+  "category": "developer"
+ },
+ {
+  "name": "Postman",
+  "slug": "postman",
+  "website": "https://postman.com",
+  "category": "developer"
+ },
+ {
+  "name": "Figma",
+  "slug": "figma",
+  "website": "https://figma.com",
+  "category": "developer"
+ },
+ {
+  "name": "Supabase",
+  "slug": "supabase",
+  "website": "https://supabase.com",
+  "category": "developer"
+ },
+ {
+  "name": "Stripe",
+  "slug": "stripe",
+  "website": "https://stripe.com",
+  "category": "finance"
+ },
+ {
+  "name": "QuickBooks Online",
+  "slug": "quickbooks-online",
+  "website": "https://quickbooks.intuit.com",
+  "category": "finance",
+  "search_hints": [
+   "developer.intuit.com create app QuickBooks Online production keys app assessment questionnaire"
+  ]
+ },
+ {
+  "name": "Xero",
+  "slug": "xero",
+  "website": "https://xero.com",
+  "category": "finance"
+ },
+ {
+  "name": "FreshBooks",
+  "slug": "freshbooks",
+  "website": "https://freshbooks.com",
+  "category": "finance"
+ },
+ {
+  "name": "Square",
+  "slug": "square",
+  "website": "https://squareup.com",
+  "category": "finance"
+ },
+ {
+  "name": "PayPal",
+  "slug": "paypal",
+  "website": "https://paypal.com",
+  "category": "finance"
+ },
+ {
+  "name": "Brex",
+  "slug": "brex",
+  "website": "https://brex.com",
+  "category": "finance"
+ },
+ {
+  "name": "Shopify",
+  "slug": "shopify",
+  "website": "https://shopify.com",
+  "category": "commerce"
+ },
+ {
+  "name": "WooCommerce",
+  "slug": "woocommerce",
+  "website": "https://woocommerce.com",
+  "category": "commerce"
+ },
+ {
+  "name": "BigCommerce",
+  "slug": "bigcommerce",
+  "website": "https://bigcommerce.com",
+  "category": "commerce"
+ },
+ {
+  "name": "Etsy",
+  "slug": "etsy",
+  "website": "https://etsy.com",
+  "category": "commerce"
+ },
+ {
+  "name": "eBay",
+  "slug": "ebay",
+  "website": "https://ebay.com",
+  "category": "commerce"
+ },
+ {
+  "name": "Amazon Seller Central",
+  "slug": "amazon-seller-central",
+  "website": "https://sellercentral.amazon.com",
+  "category": "commerce"
+ },
+ {
+  "name": "Gumroad",
+  "slug": "gumroad",
+  "website": "https://gumroad.com",
+  "category": "commerce"
+ },
+ {
+  "name": "Google Ads",
+  "slug": "google-ads",
+  "website": "https://ads.google.com",
+  "category": "marketing"
+ },
+ {
+  "name": "Meta Ads",
+  "slug": "meta-ads",
+  "website": "https://facebook.com/business/ads",
+  "category": "marketing"
+ },
+ {
+  "name": "Klaviyo",
+  "slug": "klaviyo",
+  "website": "https://klaviyo.com",
+  "category": "marketing"
+ },
+ {
+  "name": "ActiveCampaign",
+  "slug": "activecampaign",
+  "website": "https://activecampaign.com",
+  "category": "marketing"
+ },
+ {
+  "name": "Typeform",
+  "slug": "typeform",
+  "website": "https://typeform.com",
+  "category": "marketing"
+ },
+ {
+  "name": "SurveyMonkey",
+  "slug": "surveymonkey",
+  "website": "https://surveymonkey.com",
+  "category": "marketing"
+ },
+ {
+  "name": "Webflow",
+  "slug": "webflow",
+  "website": "https://webflow.com",
+  "category": "marketing"
+ },
+ {
+  "name": "Canva",
+  "slug": "canva",
+  "website": "https://canva.com",
+  "category": "marketing"
+ },
+ {
+  "name": "BambooHR",
+  "slug": "bamboohr",
+  "website": "https://bamboohr.com",
+  "category": "hr"
+ },
+ {
+  "name": "Greenhouse",
+  "slug": "greenhouse",
+  "website": "https://greenhouse.io",
+  "category": "hr"
+ },
+ {
+  "name": "Lever",
+  "slug": "lever",
+  "website": "https://lever.co",
+  "category": "hr"
+ },
+ {
+  "name": "Gusto",
+  "slug": "gusto",
+  "website": "https://gusto.com",
+  "category": "hr"
+ },
+ {
+  "name": "Workday",
+  "slug": "workday",
+  "website": "https://workday.com",
+  "category": "hr"
+ },
+ {
+  "name": "Rippling",
+  "slug": "rippling",
+  "website": "https://rippling.com",
+  "category": "hr"
+ },
+ {
+  "name": "Deel",
+  "slug": "deel",
+  "website": "https://deel.com",
+  "category": "hr"
+ },
+ {
+  "name": "Dropbox",
+  "slug": "dropbox",
+  "website": "https://dropbox.com",
+  "category": "storage"
+ },
+ {
+  "name": "Box",
+  "slug": "box",
+  "website": "https://box.com",
+  "category": "storage"
+ },
+ {
+  "name": "Google Drive",
+  "slug": "google-drive",
+  "website": "https://drive.google.com",
+  "category": "storage"
+ },
+ {
+  "name": "OneDrive",
+  "slug": "onedrive",
+  "website": "https://onedrive.live.com",
+  "category": "storage"
+ },
+ {
+  "name": "X (Twitter)",
+  "slug": "x-twitter",
+  "website": "https://x.com",
+  "category": "social"
+ },
+ {
+  "name": "Facebook",
+  "slug": "facebook",
+  "website": "https://facebook.com",
+  "category": "social"
+ },
+ {
+  "name": "Instagram",
+  "slug": "instagram",
+  "website": "https://instagram.com",
+  "category": "social"
+ },
+ {
+  "name": "LinkedIn",
+  "slug": "linkedin",
+  "website": "https://linkedin.com",
+  "category": "social"
+ },
+ {
+  "name": "YouTube",
+  "slug": "youtube",
+  "website": "https://youtube.com",
+  "category": "social"
+ },
+ {
+  "name": "TikTok",
+  "slug": "tiktok",
+  "website": "https://tiktok.com",
+  "category": "social"
+ },
+ {
+  "name": "Reddit",
+  "slug": "reddit",
+  "website": "https://reddit.com",
+  "category": "social"
+ },
+ {
+  "name": "Pinterest",
+  "slug": "pinterest",
+  "website": "https://pinterest.com",
+  "category": "social"
+ },
+ {
+  "name": "Spotify",
+  "slug": "spotify",
+  "website": "https://spotify.com",
+  "category": "social"
+ },
+ {
+  "name": "Strava",
+  "slug": "strava",
+  "website": "https://strava.com",
+  "category": "social"
+ },
+ {
+  "name": "Fitbit",
+  "slug": "fitbit",
+  "website": "https://fitbit.com",
+  "category": "social"
+ },
+ {
+  "name": "Zendesk",
+  "slug": "zendesk",
+  "website": "https://zendesk.com",
+  "category": "support"
+ },
+ {
+  "name": "Freshdesk",
+  "slug": "freshdesk",
+  "website": "https://freshdesk.com",
+  "category": "support"
+ },
+ {
+  "name": "Help Scout",
+  "slug": "help-scout",
+  "website": "https://helpscout.com",
+  "category": "support"
+ },
+ {
+  "name": "Google Analytics",
+  "slug": "google-analytics",
+  "website": "https://analytics.google.com",
+  "category": "analytics"
+ },
+ {
+  "name": "Mixpanel",
+  "slug": "mixpanel",
+  "website": "https://mixpanel.com",
+  "category": "analytics"
+ },
+ {
+  "name": "Amplitude",
+  "slug": "amplitude",
+  "website": "https://amplitude.com",
+  "category": "analytics"
+ }
+]

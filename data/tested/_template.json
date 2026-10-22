@@ -1,0 +1,15 @@
+{
+  "slug": "replace-me",
+  "tested_on": "2026-10-20",
+  "setup_minutes": null,
+  "setup_note": "",
+  "registration_access": null,
+  "approval_gate": null,
+  "registration_access_claim": "",
+  "approval_claim": "",
+  "unreviewed_limits": "",
+  "redirect_uri_rules": "",
+  "token_lifecycle": "",
+  "blockers": [],
+  "notes": []
+}

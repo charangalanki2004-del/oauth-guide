@@ -1,0 +1,256 @@
+{
+  "slug": "slack",
+  "name": "Slack",
+  "website": "https://slack.com",
+  "category": "communication",
+  "developer_portal_url": "https://api.slack.com/apps",
+  "summary": "Slack uses a standard OAuth 2.0 authorization‑code flow (v2) with bot and optional user scopes. First create a Slack app, configure redirect URLs and scopes, then generate an install link and exchange the code for an access token.",
+  "oauth_supported": true,
+  "auth_methods": [
+    "oauth2"
+  ],
+  "oauth_note": {
+    "text": "OAuth 2.0 authorization‑code flow (v2). Supports bot scopes via scope= and optional user scopes via user_scope=. No PKCE support mentioned.",
+    "evidence": "sourced",
+    "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+  },
+  "app_types": [
+    {
+      "name": "Slack App (OAuth)",
+      "when_to_use": "When you need a bot or user token to call Slack APIs",
+      "recommended_for_agents": true
+    }
+  ],
+  "registration_access": "unknown",
+  "registration_access_claim": {
+    "text": "Docs do not state who can create an app; typically any logged‑in Slack user can create one in the developer portal.",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "prerequisites": [
+    {
+      "text": "A Slack workspace and a logged‑in Slack account to access the developer portal",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/tools/node-slack-sdk/oauth/"
+    },
+    {
+      "text": "Client ID and Client Secret from the app’s Basic Information page",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/tools/node-slack-sdk/oauth/"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Create a new Slack app",
+      "detail": "Log into https://api.slack.com/apps, click “Create New App”, choose a name and workspace, and confirm.",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/tools/node-slack-sdk/oauth/"
+    },
+    {
+      "title": "Add OAuth redirect URL(s)",
+      "detail": "In the app’s OAuth & Permissions page, add your HTTPS redirect URI (e.g., https://yourdomain.com/slack/callback).",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+    },
+    {
+      "title": "Select required scopes",
+      "detail": "Add bot scopes under “Scopes” (e.g., incoming-webhook) and optional user scopes under “User Token Scopes”. Each distinct set of scopes requires a separate install flow.",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+    },
+    {
+      "title": "Generate an install URL",
+      "detail": "Construct https://slack.com/oauth/v2/authorize?client_id=YOUR_CLIENT_ID&scope=BOT_SCOPES&user_scope=USER_SCOPES (if any). Use the state parameter if you need CSRF protection.",
+      "actor": "agent",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+    },
+    {
+      "title": "Redirect the user to the install URL",
+      "detail": "Send the user to the URL; they will approve the scopes and be redirected back to your redirect URI with a code parameter.",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+    },
+    {
+      "title": "Exchange the code for an access token",
+      "detail": "POST to https://slack.com/api/oauth.v2.access with client_id, client_secret, code, and redirect_uri. Store the returned access_token (and optional refresh_token).",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+    },
+    {
+      "title": "Persist tokens per workspace",
+      "detail": "If the app will be installed in multiple workspaces, save each workspace’s tokens (and associated team ID) in a database.",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/tools/node-slack-sdk/oauth/"
+    }
+  ],
+  "approval_gate": "unknown",
+  "approval_claim": {
+    "text": "No review process for basic OAuth installation is documented; marketplace submission may trigger a review not covered here.",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "unreviewed_limits": {
+    "text": "Docs do not specify limits before any review; apps can be installed in any workspace that authorizes them.",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "review_artifacts": [
+    {
+      "text": "If you submit to the Slack App Directory, you may need a privacy policy URL and scope justification, but this is not detailed in the provided docs.",
+      "evidence": "unknown",
+      "source_url": null
+    }
+  ],
+  "approval_wait": {
+    "min_days": null,
+    "max_days": null,
+    "evidence": "unknown",
+    "source_url": null,
+    "note": "Docs do not mention review timing."
+  },
+  "setup_time": {
+    "min_minutes": 15,
+    "max_minutes": 60,
+    "evidence": "inferred",
+    "source_url": null,
+    "note": "Hands‑on time to create app, set scopes, and obtain tokens."
+  },
+  "redirect_uri_rules": {
+    "text": "Docs only say to add redirect URLs in the OAuth & Permissions page; typical Slack requirement is HTTPS and exact match, but not explicitly stated.",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "token_lifecycle": {
+    "text": "Docs do not describe token expiration or refresh mechanics; OAuth v2 returns an access_token (and optionally a refresh_token).",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "scopes_note": {
+    "text": "Bot scopes are passed via scope= parameter; user scopes via user_scope=. Each distinct set of scopes requires a separate install flow.",
+    "evidence": "sourced",
+    "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+  },
+  "instance_specific": {
+    "text": "",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "pkce_required": {
+    "text": "PKCE is not mentioned in the OAuth flow documentation; Slack’s OAuth v2 does not require it.",
+    "evidence": "inferred",
+    "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+  },
+  "blockers": [
+    {
+      "blocker": "Redirect URI mismatch",
+      "fix": "Ensure the exact HTTPS URL used in the install flow is listed in the app’s OAuth & Permissions page.",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+    },
+    {
+      "blocker": "Missing required scopes",
+      "fix": "Add all needed bot and/or user scopes before generating the install URL; each new scope set needs a new install flow.",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/authentication/installing-with-oauth/"
+    },
+    {
+      "blocker": "Using the wrong auth version",
+      "fix": "Use v2 endpoints (https://slack.com/oauth/v2/authorize) for modern apps; classic apps require v1 endpoints and authVersion='v1' in SDK.",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/tools/node-slack-sdk/oauth/"
+    },
+    {
+      "blocker": "State verification missing",
+      "fix": "Provide a stateSecret to the InstallProvider and include a state parameter in the install URL to protect against CSRF.",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/tools/node-slack-sdk/oauth/"
+    },
+    {
+      "blocker": "Attempting Sign‑in with Slack via @slack/oauth",
+      "fix": "Use the @slack/web-api Sign‑in With Slack docs instead; the @slack/oauth package does not support it.",
+      "evidence": "sourced",
+      "source_url": "https://docs.slack.dev/tools/node-slack-sdk/oauth/"
+    }
+  ],
+  "agent_can": [
+    "build the Slack install URL with client_id, scopes, and optional state",
+    "parse the OAuth callback to extract the authorization code",
+    "exchange the code for an access token via Slack’s token endpoint",
+    "store and retrieve tokens per workspace"
+  ],
+  "human_must": [
+    "create the Slack app in the developer portal",
+    "configure redirect URIs and scopes",
+    "approve the install flow in the Slack UI",
+    "handle the server‑side token exchange (if not automated)",
+    "manage any marketplace submission or compliance documentation"
+  ],
+  "composio_managed": null,
+  "composio_note": "Composio has a 'slack' toolkit (https://docs.composio.dev/kb/toolkit/slack). Composio's own OAuth credential guide for it: https://composio.dev/auth/slack. When registering, use the redirect URI shown in your Composio auth config.",
+  "sources": [
+    {
+      "url": "https://docs.slack.dev/authentication/installing-with-oauth/",
+      "title": "Installing via OAuth authorization code flow | Slack Developer Docs",
+      "fetched_at": "2026-10-21T18:31:50.863234+00:00",
+      "official": true
+    },
+    {
+      "url": "https://docs.slack.dev/tools/node-slack-sdk/oauth/",
+      "title": "OAuth | Slack Developer Docs",
+      "fetched_at": "2026-10-21T18:31:52.125665+00:00",
+      "official": true
+    },
+    {
+      "url": "https://slack.dev/",
+      "title": "Developer Hub | Slack Developers",
+      "fetched_at": "2026-10-21T18:31:52.548311+00:00",
+      "official": true
+    }
+  ],
+  "agent_attempts": [
+    {
+      "action": "GET https://slack.com/.well-known/openid-configuration",
+      "result": "Discovery document found. authorize=https://slack.com/openid/connect/authorize token=https://slack.com/api/openid.connect.token pkce=None",
+      "ok": true
+    },
+    {
+      "action": "GET https://api.slack.com/apps",
+      "result": "HTTP 200",
+      "ok": true
+    },
+    {
+      "action": "GET https://docs.composio.dev/kb/toolkit/slack",
+      "result": "HTTP 200: Composio toolkit exists, with an OAuth setup guide.",
+      "ok": true
+    }
+  ],
+  "unverified_claims": [
+    "who can create a Slack app (registration_access)",
+    "exact redirect‑URI requirements (HTTPS, exact match, localhost)",
+    "token expiration and refresh policy",
+    "whether any review is required for non‑marketplace apps",
+    "approval wait times"
+  ],
+  "tested_notes": [],
+  "confidence": "medium",
+  "difficulty": {
+    "score": 2.0,
+    "level": 2,
+    "label": "Easy",
+    "reasons": [
+      "Could not confirm who is allowed to register an app",
+      "Approval requirements could not be confirmed",
+      "Review needs 1 artifact(s) prepared"
+    ]
+  },
+  "generated_at": "2026-10-21T18:32:00.123781+00:00",
+  "generator": "groq:openai/gpt-oss-120b",
+  "input_query": "https://slack.com"
+}

@@ -1,0 +1,241 @@
+{
+  "slug": "google-workspace",
+  "name": "Google Workspace",
+  "website": "https://workspace.google.com",
+  "category": "productivity",
+  "developer_portal_url": "https://console.cloud.google.com/apis/credentials",
+  "summary": "Google Workspace OAuth requires configuring a consent screen in the Google Cloud console and creating an OAuth client ID. The main gate is scope verification for sensitive/restricted scopes; start by opening the Google Auth platform in the Cloud console.",
+  "oauth_supported": true,
+  "auth_methods": [
+    "oauth2",
+    "api_key",
+    "service_account"
+  ],
+  "oauth_note": {
+    "text": "Supports standard OAuth 2.0 authorization code flow with PKCE (plain and S256) and client‑secret flow for web apps; no other grant types are mentioned.",
+    "evidence": "sourced",
+    "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+  },
+  "app_types": [
+    {
+      "name": "OAuth client ID (Web, Android, iOS, etc.)",
+      "when_to_use": "Access user data with consent",
+      "recommended_for_agents": true
+    }
+  ],
+  "registration_access": "workspace_admin",
+  "registration_access_claim": {
+    "text": "Only users with access to the Google Cloud console for the Workspace project (typically admins) can create OAuth credentials.",
+    "evidence": "sourced",
+    "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+  },
+  "prerequisites": [
+    {
+      "text": "A Google Cloud project linked to the Workspace domain and a logged‑in admin account.",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Open Google Cloud console",
+      "detail": "Navigate to Menu → Google Auth platform → Branding (or directly to https://console.cloud.google.com/apis/credentials).",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    },
+    {
+      "title": "Configure OAuth consent screen",
+      "detail": "Enter App name, support email, select user type (Internal or External), add contact email, and accept the User Data Policy. If External, add test users under Audience.",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    },
+    {
+      "title": "Add required scopes",
+      "detail": "In the consent screen, click ‘Add scopes’ and select the minimal Google Workspace scopes your app needs. Sensitive/restricted scopes will trigger verification.",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    },
+    {
+      "title": "Create OAuth client ID",
+      "detail": "In the Cloud console go to Menu → Google Auth platform → Clients, click ‘Create Client’, choose ‘Web application’, give a name, and add authorized redirect URIs (e.g., https://yourapp.com/oauth2/callback).",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    },
+    {
+      "title": "Save client secret",
+      "detail": "After creation, copy the client ID and client secret; store them securely for your agent to use when building the authorization URL.",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    },
+    {
+      "title": "Test the flow",
+      "detail": "Use the generated client ID to build an authorization URL, go through consent, and exchange the code at https://oauth2.googleapis.com/token to obtain access/refresh tokens.",
+      "actor": "either",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    }
+  ],
+  "approval_gate": "review_for_scopes",
+  "approval_claim": {
+    "text": "Sensitive and restricted scopes require additional verification by Google; external apps using such scopes trigger a review process.",
+    "evidence": "sourced",
+    "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+  },
+  "unreviewed_limits": {
+    "text": "Before verification, apps can use only non‑sensitive scopes and can be tested with up to 100 test users (internal or added as test users).",
+    "evidence": "sourced",
+    "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+  },
+  "review_artifacts": [
+    {
+      "text": "Privacy policy URL, demo video, justification for each sensitive/restricted scope, and possibly a security assessment.",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    }
+  ],
+  "approval_wait": {
+    "min_days": null,
+    "max_days": null,
+    "evidence": "unknown",
+    "source_url": null,
+    "note": "Docs do not specify a timeline for scope verification."
+  },
+  "setup_time": {
+    "min_minutes": 15,
+    "max_minutes": 60,
+    "evidence": "inferred",
+    "source_url": null,
+    "note": "Hands‑on time to configure consent screen and create credentials."
+  },
+  "redirect_uri_rules": {
+    "text": "Redirect URIs must be HTTPS (except for localhost during development) and must match exactly one of the URIs entered in the client ID settings.",
+    "evidence": "sourced",
+    "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+  },
+  "token_lifecycle": {
+    "text": "Authorization code exchange returns an access token (typically 1 hour) and a refresh token (long‑lived). Offline access is granted by including access_type=offline. Refresh tokens can be revoked via the console.",
+    "evidence": "sourced",
+    "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+  },
+  "scopes_note": {
+    "text": "Scopes are URI strings like https://www.googleapis.com/auth/drive. Sensitive scopes need verification; incremental auth is supported via the ‘include_granted_scopes’ parameter.",
+    "evidence": "sourced",
+    "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+  },
+  "instance_specific": null,
+  "pkce_required": {
+    "text": "PKCE is supported (plain and S256) but not required for web apps; required for native apps.",
+    "evidence": "sourced",
+    "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+  },
+  "blockers": [
+    {
+      "blocker": "Using a sensitive or restricted scope without verification",
+      "fix": "Submit the verification request with privacy policy and scope justification",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    },
+    {
+      "blocker": "Missing consent screen configuration (no user type selected)",
+      "fix": "Complete the consent screen setup before creating a client ID",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    },
+    {
+      "blocker": "Redirect URI mismatch",
+      "fix": "Ensure the exact URI used in the auth request is listed in the client ID’s authorized URIs",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    },
+    {
+      "blocker": "Attempting to create credentials without admin access",
+      "fix": "Log in with a Workspace admin or a user with Cloud console permissions",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    },
+    {
+      "blocker": "Using HTTP (non‑HTTPS) redirect URIs in production",
+      "fix": "Switch to HTTPS; only localhost may use HTTP for testing",
+      "evidence": "sourced",
+      "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    }
+  ],
+  "agent_can": [
+    "build authorization URL with client ID and scopes",
+    "exchange authorization code for tokens via token endpoint",
+    "refresh access tokens",
+    "validate token signatures",
+    "list required scopes from documentation"
+  ],
+  "human_must": [
+    "log into Google Cloud console",
+    "configure consent screen details",
+    "add authorized redirect URIs",
+    "submit scope verification if needed",
+    "accept Google API Services User Data Policy"
+  ],
+  "composio_managed": null,
+  "composio_note": null,
+  "sources": [
+    {
+      "url": "https://developers.google.com/workspace/guides/configure-oauth-consent",
+      "title": "Configure the OAuth consent screen and choose scopes &nbsp;|&nbsp; Google Workspace &nbsp;|&nbsp; Google for Developers",
+      "fetched_at": "2026-10-21T18:54:21.958267+00:00",
+      "official": true
+    },
+    {
+      "url": "https://developers.google.com/workspace/guides/create-credentials",
+      "title": "Create access credentials &nbsp;|&nbsp; Google Workspace &nbsp;|&nbsp; Google for Developers",
+      "fetched_at": "2026-10-21T18:54:22.586932+00:00",
+      "official": true
+    },
+    {
+      "url": "https://developers.google.com/workspace/guides/manage-credentials",
+      "title": "Manage credentials for Google Workspace APIs &nbsp;|&nbsp; Google for Developers",
+      "fetched_at": "2026-10-21T18:54:23.285535+00:00",
+      "official": true
+    }
+  ],
+  "agent_attempts": [
+    {
+      "action": "GET https://accounts.google.com/.well-known/openid-configuration",
+      "result": "Discovery document found. authorize=https://accounts.google.com/o/oauth2/v2/auth token=https://oauth2.googleapis.com/token pkce=['plain', 'S256']",
+      "ok": true
+    },
+    {
+      "action": "GET https://console.cloud.google.com/apis/credentials",
+      "result": "HTTP 200, redirects to a login page (accounts.google.com). Portal exists; needs a human session.",
+      "ok": true
+    },
+    {
+      "action": "Composio toolkit lookup for 'google-workspace'",
+      "result": "API needs COMPOSIO_API_KEY; public page https://docs.composio.dev/kb/toolkit/googleworkspace returned HTTP 404.",
+      "ok": false
+    }
+  ],
+  "unverified_claims": [
+    "Exact review time for scope verification",
+    "Whether a paid tier is required for external app publishing"
+  ],
+  "tested_notes": [],
+  "confidence": "high",
+  "difficulty": {
+    "score": 6.0,
+    "level": 5,
+    "label": "Very hard",
+    "reasons": [
+      "Needs a workspace or org admin to create the app",
+      "Some scopes need review before real use",
+      "Review requires a security assessment",
+      "Token lifecycle has traps"
+    ]
+  },
+  "generated_at": "2026-10-21T18:54:31.995279+00:00",
+  "generator": "groq:openai/gpt-oss-120b",
+  "input_query": "https://workspace.google.com"
+}

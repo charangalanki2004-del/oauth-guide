@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="hero">
+  <h1>Before your users can connect an app, you may need the provider to approve yours.</h1>
+  <p class="lede">Look up an app to see how hard it is to register an OAuth app with that provider, how long approval takes, what will block you, and which parts an agent can do for you.</p>
+  <form class="lookup" action="/generate" method="get" role="search">
+    <label for="q" class="sr">App name or website</label>
+    <input id="q" name="q" type="text" placeholder="App name or website, e.g. Linear or https://strava.com" autocomplete="off" required>
+    <button type="submit">Look up</button>
+  </form>
+  {% if not llm_ready %}<p class="warn">No model configured, so live investigation is off. Existing guides still work. See README to set <code>LLM_API_KEY</code>.</p>{% endif %}
+</section>
+
+<section id="library" class="library">
+  <div class="library-head">
+    <h2>Library</h2>
+    <p>{{ catalog|length }} apps that support OAuth · {{ generated_count }} guides generated. Apps without a guide yet are investigated on first lookup.</p>
+    <input id="filter" type="search" placeholder="Filter the library" aria-label="Filter the library">
+  </div>
+
+  <div class="legend">
+    <span><i class="lvl" data-l="1"></i> Trivial</span>
+    <span><i class="lvl" data-l="2"></i> Easy</span>
+    <span><i class="lvl" data-l="3"></i> Moderate</span>
+    <span><i class="lvl" data-l="4"></i> Hard</span>
+    <span><i class="lvl" data-l="5"></i> Very hard</span>
+    <span><i class="lvl" data-l="0"></i> Not yet investigated</span>
+  </div>
+
+  {% for cat in categories %}
+  <h3 class="cat">{{ cat }}</h3>
+  <ul class="apps">
+    {% for a in catalog if a.category == cat %}
+    {% set g = guides.get(a.slug) %}
+    <li class="app" data-name="{{ a.name|lower }} {{ a.slug }} {{ cat }}">
+      <a href="/guides/{{ a.slug }}">
+        <i class="lvl" data-l="{{ g.difficulty.level if g else 0 }}" title="{{ g.difficulty.label if g else 'Not yet investigated' }}"></i>
+        <span class="app-name">{{ a.name }}</span>
+        {% if g %}
+          <span class="app-meta">{{ g.difficulty.label }}{% if g.setup_time.max_minutes %} · ~{{ g.setup_time.max_minutes }} min{% endif %}{% if g.approval_wait.max_days %} · wait ≤{{ g.approval_wait.max_days }} d{% endif %}</span>
+        {% else %}
+          <span class="app-meta muted">Investigate</span>
+        {% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+
+  {% if extra %}
+  <h3 class="cat">Submitted by users</h3>
+  <ul class="apps">
+    {% for g in extra %}
+    <li class="app" data-name="{{ g.name|lower }} {{ g.slug }}">
+      <a href="/guides/{{ g.slug }}">
+        <i class="lvl" data-l="{{ g.difficulty.level }}"></i>
+        <span class="app-name">{{ g.name }}</span>
+        <span class="app-meta">{{ g.difficulty.label }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const f = document.getElementById('filter');
+  f.addEventListener('input', () => {
+    const q = f.value.trim().toLowerCase();
+    document.querySelectorAll('.app').forEach(li => {
+      li.hidden = q && !li.dataset.name.includes(q);
+    });
+    document.querySelectorAll('.cat').forEach(h => {
+      const ul = h.nextElementSibling;
+      h.hidden = ul && ![...ul.children].some(li => !li.hidden);
+    });
+  });
+</script>
+{% endblock %}

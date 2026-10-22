@@ -1,0 +1,274 @@
+{
+  "slug": "shopify",
+  "name": "Shopify",
+  "website": "https://shopify.com",
+  "category": "commerce",
+  "developer_portal_url": "https://partners.shopify.com",
+  "summary": "Shopify supports OAuth2 (authorization code grant for public apps and client‑credentials grant for internal apps). First create a Partner app in the Dev Dashboard, configure redirect URIs and scopes, then use the standard OAuth flow.",
+  "oauth_supported": true,
+  "auth_methods": [
+    "oauth2"
+  ],
+  "oauth_note": {
+    "text": "Public apps use the OAuth2 authorization code grant; internal apps can use the client‑credentials grant (no redirect).",
+    "evidence": "sourced",
+    "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+  },
+  "app_types": [
+    {
+      "name": "Public (installed) app",
+      "when_to_use": "App that merchants install on their stores",
+      "recommended_for_agents": true
+    },
+    {
+      "name": "Custom/internal app",
+      "when_to_use": "App that only accesses stores in your own organization",
+      "recommended_for_agents": true
+    }
+  ],
+  "registration_access": "partner_program",
+  "registration_access_claim": {
+    "text": "Only users with a Shopify Partner account can create apps in the Dev Dashboard.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "prerequisites": [
+    {
+      "text": "Shopify Partner account and access to the Dev Dashboard",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "text": "App client ID and client secret from the Dev Dashboard",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+    },
+    {
+      "text": "One or more redirect URIs added to the app settings",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Create a new app in the Partner Dev Dashboard",
+      "detail": "Log into partners.shopify.com, click ‘Apps’, then ‘Create app’. Choose Public or Custom as needed.",
+      "actor": "human",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Record the client ID and client secret",
+      "detail": "In the app’s Settings page copy the ‘API key’ (client ID) and ‘API secret key’ (client secret).",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+    },
+    {
+      "title": "Add redirect URI(s) to the app",
+      "detail": "In Settings → App setup, add the exact URL(s) your app will receive the OAuth callback on. They must match the URI you’ll use later.",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+    },
+    {
+      "title": "Build the authorization URL",
+      "detail": "Construct https://{shop}.myshopify.com/admin/oauth/authorize?client_id={client_id}&scope={comma‑separated‑scopes}&redirect_uri={redirect_uri}&state={nonce}&grant_options[]=offline (optional). Include a random state value.",
+      "actor": "agent",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Redirect the merchant to the URL",
+      "detail": "Send the merchant’s browser to the URL; Shopify shows the permission screen.",
+      "actor": "agent",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Validate the callback",
+      "detail": "When Shopify redirects back, verify the state matches, compute HMAC‑SHA256 of the query string using the client secret and compare to the hmac parameter, and ensure the shop domain matches ^[a-zA-Z0-9][a-zA-Z0-9\\-]*\\.myshopify\\.com$",
+      "actor": "human",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+    },
+    {
+      "title": "Exchange the code for an access token",
+      "detail": "POST to the token endpoint (as listed in the OpenID discovery document) with client_id, client_secret, code and redirect_uri. Receive an offline access token (24‑hour expiry) or online token as requested.",
+      "actor": "agent",
+      "evidence": "inferred",
+      "source_url": null
+    },
+    {
+      "title": "Store the token and use it in API calls",
+      "detail": "Include the token in the X‑Shopify‑Access‑Token header on GraphQL Admin API requests.",
+      "actor": "agent",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization"
+    }
+  ],
+  "approval_gate": "review_for_scopes",
+  "approval_claim": {
+    "text": "Certain sensitive scopes require Shopify’s approval before a public app can request them.",
+    "evidence": "sourced",
+    "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization"
+  },
+  "unreviewed_limits": {
+    "text": "Apps using only non‑restricted scopes can be installed on development stores without any additional review.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "review_artifacts": [
+    {
+      "text": "Justification for restricted scopes (e.g., protected customer data)",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization"
+    },
+    {
+      "text": "Privacy policy URL (required for public apps)",
+      "evidence": "inferred",
+      "source_url": null
+    }
+  ],
+  "approval_wait": {
+    "min_days": null,
+    "max_days": null,
+    "evidence": "unknown",
+    "source_url": null,
+    "note": "Docs do not specify a review timeline."
+  },
+  "setup_time": {
+    "min_minutes": 15,
+    "max_minutes": 60,
+    "evidence": "inferred",
+    "source_url": null,
+    "note": "Hands‑on time to create the app and obtain credentials."
+  },
+  "redirect_uri_rules": {
+    "text": "The redirect URI must exactly match one of the URIs configured in the Dev Dashboard; no wildcards. HTTPS is recommended but not explicitly required in the docs.",
+    "evidence": "sourced",
+    "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+  },
+  "token_lifecycle": {
+    "text": "Authorization code flow returns an offline access token that persists across sessions; tokens expire after 24 hours (client‑credentials grant also 24 h). No refresh token; request a new token when expired.",
+    "evidence": "sourced",
+    "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/client-credentials-grant?lang=node"
+  },
+  "scopes_note": {
+    "text": "Scopes are a comma‑separated list; some scopes (e.g., protected customer data) trigger additional requirements and may need Shopify approval.",
+    "evidence": "sourced",
+    "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+  },
+  "instance_specific": {
+    "text": "API calls are made against a specific shop’s domain {shop}.myshopify.com; tokens are scoped to that shop.",
+    "evidence": "inferred",
+    "source_url": null
+  },
+  "pkce_required": {
+    "text": "PKCE support is mentioned in the discovery document but not required by the official docs; not mentioned in the provided sources.",
+    "evidence": "unknown",
+    "source_url": null
+  },
+  "blockers": [
+    {
+      "blocker": "Redirect URI does not exactly match the one configured",
+      "fix": "Add the exact URI in the app settings or update the URL used in the auth request.",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+    },
+    {
+      "blocker": "State or HMAC validation fails",
+      "fix": "Store the generated state nonce, compare it on callback, and compute HMAC‑SHA256 using the client secret as described.",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node"
+    },
+    {
+      "blocker": "Requesting a restricted scope without Shopify approval",
+      "fix": "Submit a scope justification via the Partner Dashboard or remove the scope until approved.",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization"
+    },
+    {
+      "blocker": "Using client‑credentials grant on a shop that isn’t in your organization (shop_not_permitted error)",
+      "fix": "Only use client‑credentials for stores you own; for external merchants use the authorization code flow.",
+      "evidence": "sourced",
+      "source_url": "https://shopify.dev/docs/apps/build/authentication-authorization/client-credentials-grant?lang=node"
+    }
+  ],
+  "agent_can": [
+    "generate the OAuth authorization URL",
+    "parse the OpenID discovery document for endpoints",
+    "exchange authorization code for token (POST request)",
+    "store and refresh tokens automatically",
+    "call GraphQL Admin API with X‑Shopify‑Access‑Token header"
+  ],
+  "human_must": [
+    "create a Shopify Partner account",
+    "create the app in the Dev Dashboard",
+    "configure redirect URIs and select scopes",
+    "review and accept any required scope approvals",
+    "securely store client secret"
+  ],
+  "composio_managed": null,
+  "composio_note": "Composio has a 'shopify' toolkit (https://docs.composio.dev/kb/toolkit/shopify). Composio's own OAuth credential guide for it: https://composio.dev/auth/shopify. When registering, use the redirect URI shown in your Composio auth config.",
+  "sources": [
+    {
+      "url": "https://shopify.dev/docs/apps/build/authentication-authorization",
+      "title": "About app authentication",
+      "fetched_at": "2026-10-21T18:34:21.306559+00:00",
+      "official": true
+    },
+    {
+      "url": "https://shopify.dev/docs/apps/build/authentication-authorization/authenticate-standalone-apps?lang=node",
+      "title": "Authenticate a standalone or API-only app",
+      "fetched_at": "2026-10-21T18:34:23.608843+00:00",
+      "official": true
+    },
+    {
+      "url": "https://shopify.dev/docs/apps/build/authentication-authorization/client-credentials-grant?lang=node",
+      "title": "Authenticate an app for stores in your organization",
+      "fetched_at": "2026-10-21T18:34:26.757412+00:00",
+      "official": true
+    }
+  ],
+  "agent_attempts": [
+    {
+      "action": "GET https://login.myshopify.com/.well-known/openid-configuration",
+      "result": "Discovery document found. authorize=https://shopify.com/authentication/346032/oauth/authorize token=https://shopify.com/authentication/346032/oauth/token pkce=['S256']",
+      "ok": true
+    },
+    {
+      "action": "GET https://partners.shopify.com",
+      "result": "HTTP 200 → https://www.shopify.com/in/partners",
+      "ok": true
+    },
+    {
+      "action": "GET https://docs.composio.dev/kb/toolkit/shopify",
+      "result": "HTTP 200: Composio toolkit exists, with an OAuth setup guide.",
+      "ok": true
+    }
+  ],
+  "unverified_claims": [
+    "Exact token endpoint URL (from discovery doc)",
+    "HTTPS requirement for redirect URIs",
+    "Review artifact list beyond privacy policy and scope justification",
+    "Exact review timeframes"
+  ],
+  "tested_notes": [],
+  "confidence": "medium",
+  "difficulty": {
+    "score": 7.5,
+    "level": 5,
+    "label": "Very hard",
+    "reasons": [
+      "Needs enrolment in a partner program",
+      "Some scopes need review before real use",
+      "Review needs 2 artifact(s) prepared",
+      "Tenant/instance-specific configuration",
+      "Token lifecycle has traps"
+    ]
+  },
+  "generated_at": "2026-10-21T18:34:40.796050+00:00",
+  "generator": "groq:openai/gpt-oss-120b",
+  "input_query": "https://shopify.com"
+}

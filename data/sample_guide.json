@@ -1,0 +1,58 @@
+{
+  "slug": "sample",
+  "name": "Sample App",
+  "website": "https://example.com",
+  "category": "developer",
+  "developer_portal_url": "https://example.com/settings/developers",
+  "summary": "Registration is a short form any account can fill in and there is no review for private use, so most of the work is choosing the right app type and keeping the client secret safe. Start by creating the app under the account that should own it long term.",
+  "oauth_supported": true,
+  "auth_methods": ["oauth2", "personal_access_token"],
+  "oauth_note": {"text": "Authorization code flow for web apps; device flow available for CLIs.", "evidence": "inferred", "source_url": null},
+  "app_types": [
+    {"name": "OAuth App", "when_to_use": "Simple user-authorized access with classic scopes. Matches most Composio auth configs.", "recommended_for_agents": true},
+    {"name": "Platform App", "when_to_use": "Fine-grained permissions and short-lived tokens; more setup, recommended by the provider for new integrations.", "recommended_for_agents": false}
+  ],
+  "registration_access": "anyone",
+  "registration_access_claim": {"text": "Any user account can register an app under their personal account or an organization they administer.", "evidence": "inferred", "source_url": null},
+  "prerequisites": [
+    {"text": "An account that should own the app (prefer an organization, not an individual).", "evidence": "inferred", "source_url": null},
+    {"text": "The redirect URI from your Composio auth config.", "evidence": "inferred", "source_url": null}
+  ],
+  "steps": [
+    {"title": "Open developer settings", "detail": "Profile menu → Settings → Developer settings → OAuth Apps → New OAuth App.", "actor": "human", "evidence": "inferred", "source_url": null},
+    {"title": "Fill the registration form", "detail": "Application name, homepage URL, optional description, and the authorization callback URL. The callback must match the redirect URI exactly.", "actor": "either", "evidence": "inferred", "source_url": null},
+    {"title": "Generate a client secret", "detail": "Shown once. Store it in a secret manager immediately.", "actor": "human", "evidence": "inferred", "source_url": null},
+    {"title": "Create the Composio auth config", "detail": "Paste client ID and secret, choose scopes, save, copy the auth config ID.", "actor": "agent", "evidence": "inferred", "source_url": null},
+    {"title": "Connect a test account", "detail": "Run a Connect Link and confirm the consent screen shows your app name and expected scopes.", "actor": "either", "evidence": "inferred", "source_url": null}
+  ],
+  "approval_gate": "none",
+  "approval_claim": {"text": "No review for private use. Organizations may restrict third-party app access, in which case an org owner approves the app.", "evidence": "inferred", "source_url": null},
+  "unreviewed_limits": {"text": "No user cap; the app works for anyone who authorizes it.", "evidence": "inferred", "source_url": null},
+  "review_artifacts": [],
+  "approval_wait": {"min_days": null, "max_days": null, "evidence": "inferred", "source_url": null, "note": "No review process exists for unlisted apps."},
+  "setup_time": {"min_minutes": 10, "max_minutes": 30, "evidence": "inferred", "source_url": null, "note": "Form filling plus credential handling."},
+  "redirect_uri_rules": {"text": "One callback URL per app; subpaths of it are accepted; http allowed for localhost.", "evidence": "inferred", "source_url": null},
+  "token_lifecycle": {"text": "Classic OAuth App tokens do not expire unless revoked; no refresh tokens.", "evidence": "inferred", "source_url": null},
+  "scopes_note": {"text": "Coarse scopes such as repo grant broad access; request the minimum.", "evidence": "inferred", "source_url": null},
+  "instance_specific": {"text": "", "evidence": "unknown", "source_url": null},
+  "pkce_required": {"text": "Not mentioned.", "evidence": "unknown", "source_url": null},
+  "blockers": [
+    {"blocker": "redirect_uri mismatch error", "fix": "The callback URL in the app must match the one Composio shows, character for character.", "evidence": "inferred", "source_url": null},
+    {"blocker": "Org resources not visible after authorizing", "fix": "An organization owner must approve the app under the org's third-party access settings.", "evidence": "inferred", "source_url": null}
+  ],
+  "agent_can": ["Draft the registration fields", "Create the Composio auth config", "Build and test the authorize URL", "Check the redirect URI matches"],
+  "human_must": ["Log in and own the account/org", "Click Register and copy the secret", "Approve third-party access as org owner if needed"],
+  "composio_managed": null,
+  "composio_note": null,
+  "sources": [],
+  "agent_attempts": [
+    {"action": "GET https://example.com/settings/developers", "result": "HTTP 200 (mock)", "ok": true}
+  ],
+  "unverified_claims": ["Everything in mock mode is a placeholder. Run with a real model to investigate."],
+  "tested_notes": [],
+  "confidence": "low",
+  "difficulty": {"score": 0, "level": 1, "label": "Trivial", "reasons": []},
+  "generated_at": "2026-01-01T00:00:00+00:00",
+  "generator": "mock",
+  "input_query": "sample"
+}

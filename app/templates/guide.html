@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% block title %}{{ g.name }} OAuth app setup — difficulty {{ g.difficulty.level }}/5{% endblock %}
+{% block desc %}{{ g.summary }}{% endblock %}
+
+{% macro tier(e) -%}<span class="tier {{ e.value if e.value is defined else e }}">{{ e.value if e.value is defined else e }}</span>{%- endmacro %}
+{% macro src(u) -%}{% if u %} <a class="src" href="{{ u }}" rel="noopener" title="{{ u }}">source</a>{% endif %}{%- endmacro %}
+{% macro claim(c, label) -%}
+{% if c and c.text %}<div class="claim"><dt>{{ label }}</dt><dd>{{ c.text }} {{ tier(c.evidence) }}{{ src(c.source_url) }}</dd></div>{% endif %}
+{%- endmacro %}
+
+{% block body %}
+<article class="guide">
+  <header class="verdict">
+    <div class="verdict-head">
+      <h1>{{ g.name }}</h1>
+      {% if g.website %}<a class="site" href="{{ g.website }}" rel="noopener">{{ g.website|replace('https://','')|replace('http://','')|trim('/') }}</a>{% endif %}
+    </div>
+    <p class="summary">{{ g.summary }}</p>
+
+    <dl class="facts">
+      <div class="fact">
+        <dt>Difficulty</dt>
+        <dd>
+          <span class="ladder" aria-label="{{ g.difficulty.level }} of 5">
+            {% for i in range(1,6) %}<i class="{{ 'on' if i <= g.difficulty.level }}" data-l="{{ g.difficulty.level }}"></i>{% endfor %}
+          </span>
+          <strong>{{ g.difficulty.label }}</strong>
+        </dd>
+      </div>
+      <div class="fact">
+        <dt>Hands-on time</dt>
+        <dd>{% if g.setup_time.min_minutes or g.setup_time.max_minutes %}{{ g.setup_time.min_minutes or '?' }}–{{ g.setup_time.max_minutes or '?' }} min{% else %}Unknown{% endif %} {{ tier(g.setup_time.evidence) }}</dd>
+      </div>
+      <div class="fact">
+        <dt>Approval wait</dt>
+        <dd>{% if g.approval_wait.max_days %}{{ g.approval_wait.min_days or 0 }}–{{ g.approval_wait.max_days }} days{% elif g.approval_gate.value == 'none' %}None{% else %}Not stated{% endif %} {{ tier(g.approval_wait.evidence) }}</dd>
+      </div>
+      <div class="fact">
+        <dt>Gate</dt>
+        <dd><code>{{ g.approval_gate.value }}</code></dd>
+      </div>
+      <div class="fact">
+        <dt>Confidence</dt>
+        <dd><span class="conf {{ g.confidence }}">{{ g.confidence }}</span></dd>
+      </div>
+    </dl>
+
+    {% if g.difficulty.reasons %}
+    <ul class="reasons">{% for r in g.difficulty.reasons %}<li>{{ r }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if g.approval_wait.note and not g.approval_wait.max_days %}<p class="note">{{ g.approval_wait.note }}</p>{% endif %}
+
+    <div class="share">
+      <button type="button" data-copy="{{ base_url }}/guides/{{ g.slug }}">Copy link</button>
+      <a href="/guides/{{ g.slug }}.md">Markdown</a>
+      <a href="/api/guides/{{ g.slug }}">JSON</a>
+      <a href="/generate?q={{ g.input_query or g.name }}&force=1">Re-investigate</a>
+    </div>
+  </header>
+
+  {% if g.oauth_supported is sameas false %}
+  <section class="block stop">
+    <h2>This app does not appear to offer OAuth</h2>
+    <dl>{{ claim(g.oauth_note, 'Auth methods') }}</dl>
+    {% if g.auth_methods %}<p>Reported auth methods: {% for m in g.auth_methods %}<code>{{ m }}</code> {% endfor %}</p>{% endif %}
+  </section>
+  {% endif %}
+
+  <div class="cols">
+  <div class="main">
+
+    {% if g.app_types %}
+    <section class="block">
+      <h2>Which app type to create</h2>
+      <p class="hint">Picking the wrong one usually means starting over.</p>
+      <ul class="types">
+        {% for t in g.app_types %}<li{% if t.recommended_for_agents %} class="rec"{% endif %}><strong>{{ t.name }}</strong>{% if t.recommended_for_agents %} <em>recommended for agents</em>{% endif %}<br>{{ t.when_to_use }}</li>{% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    <section class="block">
+      <h2>Before you start</h2>
+      <dl>
+        {{ claim(g.registration_access_claim, 'Who can register') }}
+        {% if g.developer_portal_url %}<div class="claim"><dt>Portal</dt><dd><a href="{{ g.developer_portal_url }}" rel="noopener">{{ g.developer_portal_url }}</a></dd></div>{% endif %}
+        {% for c in g.prerequisites %}{{ claim(c, 'Need') }}{% endfor %}
+      </dl>
+    </section>
+
+    {% if g.steps %}
+    <section class="block">
+      <h2>Steps</h2>
+      <ol class="steps">
+        {% for s in g.steps %}
+        <li>
+          <div class="step-head"><strong>{{ s.title }}</strong> <span class="actor {{ s.actor.value }}">{{ {'agent':'agent can do','human':'you do this','either':'agent drafts, you confirm'}[s.actor.value] }}</span></div>
+          <p>{{ s.detail }} {{ tier(s.evidence) }}{{ src(s.source_url) }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+    {% endif %}
+
+    <section class="block">
+      <h2>Approval</h2>
+      <dl>
+        {{ claim(g.approval_claim, 'Gate') }}
+        {{ claim(g.unreviewed_limits, 'Before approval') }}
+        {% if g.approval_wait.note %}<div class="claim"><dt>Wait</dt><dd>{{ g.approval_wait.note }} {{ tier(g.approval_wait.evidence) }}{{ src(g.approval_wait.source_url) }}</dd></div>{% endif %}
+        {% for c in g.review_artifacts %}{{ claim(c, 'Prepare') }}{% endfor %}
+      </dl>
+    </section>
+
+    <section class="block">
+      <h2>Nuances that bite</h2>
+      <dl>
+        {{ claim(g.redirect_uri_rules, 'Redirect URIs') }}
+        {{ claim(g.token_lifecycle, 'Tokens') }}
+        {{ claim(g.scopes_note, 'Scopes') }}
+        {{ claim(g.pkce_required, 'PKCE') }}
+        {{ claim(g.instance_specific, 'Instance') }}
+        {{ claim(g.oauth_note, 'Flows') }}
+      </dl>
+    </section>
+
+    {% if g.blockers %}
+    <section class="block">
+      <h2>If you get stuck</h2>
+      <ul class="blockers">
+        {% for b in g.blockers %}<li><strong>{{ b.blocker }}</strong><br>{{ b.fix }} {{ tier(b.evidence) }}{{ src(b.source_url) }}</li>{% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+  </div>
+
+  <aside class="side">
+    <section class="block handoff">
+      <h2>Agent vs. you</h2>
+      {% if g.agent_can %}<h3>An agent can</h3><ul>{% for x in g.agent_can %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+      {% if g.human_must %}<h3>You must</h3><ul>{% for x in g.human_must %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+    </section>
+
+    {% if g.composio_note or g.composio_managed is not none %}
+    <section class="block">
+      <h2>Composio</h2>
+      <p>{% if g.composio_managed %}A Composio-managed OAuth app exists for this toolkit, so you can prototype without registering your own. {% elif g.composio_managed is sameas false %}No Composio-managed OAuth app; you must bring your own. {% endif %}{{ g.composio_note or '' }}</p>
+      <p class="hint">When you do register your own app, use the redirect URI shown in your Composio auth config, not one copied from a blog post.</p>
+    </section>
+    {% endif %}
+
+    {% if g.tested_notes %}
+    <section class="block tested-box">
+      <h2>Tested by a human</h2>
+      <ul>{% for c in g.tested_notes %}<li>{{ c.text }}</li>{% endfor %}</ul>
+    </section>
+    {% endif %}
+
+    <section class="block">
+      <h2>What the agent tried</h2>
+      {% if g.agent_attempts %}
+      <ul class="attempts">{% for a in g.agent_attempts %}<li class="{{ 'ok' if a.ok else ('fail' if a.ok is sameas false else 'na') }}"><code>{{ a.action }}</code><br>{{ a.result }}</li>{% endfor %}</ul>
+      {% else %}<p class="hint">Nothing was probed for this guide.</p>{% endif %}
+    </section>
+
+    {% if g.unverified_claims %}
+    <section class="block">
+      <h2>Not verified</h2>
+      <ul>{% for x in g.unverified_claims %}<li>{{ x }}</li>{% endfor %}</ul>
+    </section>
+    {% endif %}
+
+    <section class="block">
+      <h2>Sources</h2>
+      <ul class="sources">
+        {% for s in g.sources %}<li><a href="{{ s.url }}" rel="noopener">{{ s.title or s.url }}</a><br><small>{{ 'official' if s.official else 'third-party' }} · {{ s.url|replace('https://','')|truncate(60) }}</small></li>{% endfor %}
+      </ul>
+      <p class="hint">Generated {{ g.generated_at[:10] }} by <code>{{ g.generator }}</code>. Provider rules change; re-investigate if this is older than a few weeks.</p>
+    </section>
+  </aside>
+  </div>
+</article>
+{% endblock %}
+{% block scripts %}
+<script>
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'Link copied'; setTimeout(()=> b.textContent='Copy link', 1500); }
+  catch { prompt('Copy this link', b.dataset.copy); }
+}));
+</script>
+{% endblock %}

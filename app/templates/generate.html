@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Investigate an app — OAuth app setup guides{% endblock %}
+{% block body %}
+<section class="gen">
+  <h1>Investigate an app</h1>
+  <p class="lede">The agent finds the provider's developer docs, reads them, probes what it can, and writes a guide with evidence tags. Usually 30–90 seconds.</p>
+  <form id="form" class="lookup">
+    <label for="q" class="sr">App name or website</label>
+    <input id="q" name="q" type="text" value="{{ q }}" placeholder="App name or website" autocomplete="off" required>
+    <button type="submit" id="go">Investigate</button>
+  </form>
+  {% if not llm_ready %}<p class="warn">No model configured. Set <code>LLM_PROVIDER</code> and <code>LLM_API_KEY</code> in <code>.env</code> (or <code>MOCK_MODE=1</code> for a demo run).</p>{% endif %}
+
+  <ol id="log" class="log" hidden></ol>
+  <p id="status" class="status"></p>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+const form = document.getElementById('form');
+const log = document.getElementById('log');
+const status = document.getElementById('status');
+const go = document.getElementById('go');
+const params = new URLSearchParams(location.search);
+const force = params.get('force') === '1';
+
+const STAGE = {identify:'Identify', search:'Search', fetch:'Read', probe:'Probe', extract:'Extract', validate:'Check', done:'Done', error:'Error'};
+
+function add(ev) {
+  const li = document.createElement('li');
+  li.className = 'ev ' + ev.stage;
+  li.innerHTML = `<span class="stage">${STAGE[ev.stage] || ev.stage}</span><span class="msg"></span>`;
+  li.querySelector('.msg').textContent = ev.message;
+  if (ev.data && ev.data.url) {
+    const a = document.createElement('a'); a.href = ev.data.url; a.rel='noopener'; a.textContent = ' ↗'; a.className='src';
+    li.querySelector('.msg').appendChild(a);
+  }
+  log.appendChild(li);
+  li.scrollIntoView({block:'nearest'});
+}
+
+async function run(query) {
+  log.hidden = false; log.innerHTML = ''; status.textContent = ''; go.disabled = true;
+  let r;
+  try {
+    r = await fetch('/api/generate', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({query, force})});
+  } catch (e) { status.textContent = 'Could not reach the server.'; go.disabled = false; return; }
+  if (!r.ok) { status.textContent = (await r.json()).detail || 'Request failed.'; go.disabled = false; return; }
+  const j = await r.json();
+  if (j.cached) { add({stage:'done', message:'A guide already exists; opening it. Use “Re-investigate” on the guide to refresh.'}); location.href = '/guides/' + j.slug; return; }
+  const es = new EventSource('/api/jobs/' + j.job_id + '/events');
+  es.onmessage = (m) => {
+    const ev = JSON.parse(m.data);
+    add(ev);
+    if (ev.stage === 'done' && ev.data && ev.data.slug) { es.close(); status.textContent = 'Opening the guide…'; setTimeout(()=> location.href = '/guides/' + ev.data.slug, 600); }
+    if (ev.stage === 'error') { es.close(); status.textContent = 'The investigation failed: ' + ev.message + ' — try a website URL instead of a name, or check the model key.'; go.disabled = false; }
+  };
+  es.onerror = () => { es.close(); if (!status.textContent) status.textContent = 'Lost the progress stream. Refresh the library; the guide may still have been saved.'; go.disabled = false; };
+}
+
+form.addEventListener('submit', (e) => { e.preventDefault(); const q = document.getElementById('q').value.trim(); if (q) { history.replaceState(null,'', '/generate?q=' + encodeURIComponent(q) + (force?'&force=1':'')); run(q); } });
+{% if q %}run({{ q|tojson }});{% endif %}
+</script>
+{% endblock %}
