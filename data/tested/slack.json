@@ -1,0 +1,29 @@
+{
+  "slug": "slack",
+  "tested_on": "2026-10-22",
+  "setup_minutes": 8,
+  "setup_note": "Needs a Slack workspace you belong to (created a free one first, ~2 min). api.slack.com/apps → 'Create new app' is now a 4-step wizard: choose a start (templates 'AI agent' / 'Starter app', 'From a manifest', 'Blank app', or the Slack CLI), name + workspace, pick scopes, finish. On finishing, the dialog says the app 'was created and installed to the selected workspace' and shows the credentials in a collapsible 'Your app credentials' panel. No review, no wait.",
+  "registration_access": "anyone",
+  "approval_gate": "marketplace_only",
+  "registration_access_claim": "Anyone with a Slack account and a workspace they are a member of can create an app; a free workspace created minutes earlier was enough.",
+  "approval_claim": "The app was created and installed to my own workspace with no review. The only review path shown is the Marketplace 'Prepare & Submit' section in the sidebar, with five steps: Your App Listing, Review scopes, Security and compliance, Testing information, Automated checks. It is optional.",
+  "unreviewed_limits": "The wizard installed the app into the developer's own workspace immediately, with the chosen bot scope (chat:write) active. Installing into other workspaces was not tested.",
+  "redirect_uri_rules": "OAuth & Permissions → Redirect URLs. http://localhost:8000/callback was accepted and saved (no HTTPS requirement for localhost). The page states that a URL passed in an OAuth request 'must (partially) match' one of the saved URLs, so matching is prefix-based, not exact. Redirect URLs are only needed to generate the 'Add to Slack' button or to distribute the app.",
+  "token_lifecycle": "",
+  "blockers": [
+    {
+      "blocker": "The 'From scratch' option that older docs and tutorials describe no longer exists; the create dialog offers templates, a manifest upload, 'Blank app', or the Slack CLI.",
+      "fix": "Choose 'Blank app' for the equivalent of the old 'From scratch' flow."
+    },
+    {
+      "blocker": "Scopes are chosen inside the creation wizard; an app created with no scopes has nothing to request at install time.",
+      "fix": "Add at least one bot scope (e.g. chat:write) in the wizard, or later under OAuth & Permissions → Scopes."
+    }
+  ],
+  "notes": [
+    "Scopes page shows a 'Required' toggle per scope and says changes in optional status apply immediately to a published app 'as long as the scopes are already approved' — scope approval is part of the Marketplace review, not of creating the app.",
+    "Credentials (Client ID / Client Secret / Signing Secret) are under Basic Information → App Credentials and were also shown on the wizard's final screen.",
+    "Corrects the generated guide's uncertainty: the gate is 'marketplace_only', not 'unknown'; private/own-workspace use needs no review at all.",
+    "The Slack CLI (`slack create`, `slack run`) is offered as an alternative to the web form, so most of the setup could be done by an agent from a terminal, except logging in."
+  ]
+}
