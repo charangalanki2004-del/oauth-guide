@@ -107,10 +107,10 @@
   },
   "setup_time": {
     "min_minutes": 13,
-    "max_minutes": 60,
+    "max_minutes": 13,
     "evidence": "tested",
     "source_url": null,
-    "note": "console.cloud.google.com with a personal Gmail account: create a project, then Google Auth Platform (the renamed 'OAuth consent screen') → Create branding, a 4-step wizard (Project configuration: app name + support email; Audience: Internal/External; Contact information; Finish). Then Clients → Create client → Web application → redirect URI → Create; the client ID and secret appear in a dialog with a 'Download JSON' button. About 13 minutes including project creation; no review at this stage."
+    "note": "Measured once on 2026-10-22. console.cloud.google.com with a personal Gmail account: create a project, then Google Auth Platform (the renamed 'OAuth consent screen') → Create branding, a 4-step wizard (Project configuration: app name + support email; Audience: Internal/External; Contact information; Finish). Then Clients → Create client → Web application → redirect URI → Create; the client ID and secret appear in a dialog with a 'Download JSON' button. About 13 minutes including project creation; no review at this stage."
   },
   "redirect_uri_rules": {
     "text": "The web client form has separate 'Authorised JavaScript origins' and 'Authorised redirect URIs' lists. http://localhost:8000/callback was accepted as a redirect URI. The form warns: 'It may take five minutes to a few hours for settings to take effect', so a freshly added redirect URI can be rejected at first.",

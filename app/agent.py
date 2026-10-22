@@ -549,10 +549,11 @@ def merge_tested(g: Guide) -> Guide:
     for note in t.get("notes", []):
         g.tested_notes.append(Claim(text=note, evidence=Evidence.tested))
     if t.get("setup_minutes"):
-        g.setup_time.min_minutes = t["setup_minutes"]
-        g.setup_time.max_minutes = max(t["setup_minutes"], g.setup_time.max_minutes or 0)
+        # one measured attempt replaces the model's guessed range; don't mix the two under one badge
+        g.setup_time.min_minutes = g.setup_time.max_minutes = int(t["setup_minutes"])
         g.setup_time.evidence = Evidence.tested
-        g.setup_time.note = t.get("setup_note") or g.setup_time.note
+        g.setup_time.note = (t.get("setup_note") or g.setup_time.note or "")
+        g.setup_time.note = f"Measured once on {t.get('tested_on', 'a real attempt')}. " + g.setup_time.note
     for field in ("registration_access_claim", "approval_claim", "unreviewed_limits",
                   "redirect_uri_rules", "token_lifecycle"):
         if field in t and t[field]:

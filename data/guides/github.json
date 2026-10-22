@@ -104,10 +104,10 @@
   },
   "setup_time": {
     "min_minutes": 5,
-    "max_minutes": 60,
+    "max_minutes": 5,
     "evidence": "tested",
     "source_url": null,
-    "note": "Logged-in personal account → Settings → Developer settings → OAuth Apps → 'Register a new OAuth app'. Four fields (name, homepage URL, optional description, redirect URI) plus three checkboxes. Client ID shown immediately on 'Application created successfully'; client secret via a separate 'Generate a new client secret' button. No review, no waiting, no email."
+    "note": "Measured once on 2026-10-22. Logged-in personal account → Settings → Developer settings → OAuth Apps → 'Register a new OAuth app'. Four fields (name, homepage URL, optional description, redirect URI) plus three checkboxes. Client ID shown immediately on 'Application created successfully'; client secret via a separate 'Generate a new client secret' button. No review, no waiting, no email."
   },
   "redirect_uri_rules": {
     "text": "The form allows up to 10 redirect URIs. http://localhost:8000/callback was accepted without any HTTPS warning. An optional 'Allow wildcard matching' checkbox (off by default) extends a URI to subdomains and additional paths; without it, matching is exact.",

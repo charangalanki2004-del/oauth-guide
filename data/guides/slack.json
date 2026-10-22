@@ -117,10 +117,10 @@
   },
   "setup_time": {
     "min_minutes": 8,
-    "max_minutes": 60,
+    "max_minutes": 8,
     "evidence": "tested",
     "source_url": null,
-    "note": "Needs a Slack workspace you belong to (created a free one first, ~2 min). api.slack.com/apps → 'Create new app' is now a 4-step wizard: choose a start (templates 'AI agent' / 'Starter app', 'From a manifest', 'Blank app', or the Slack CLI), name + workspace, pick scopes, finish. On finishing, the dialog says the app 'was created and installed to the selected workspace' and shows the credentials in a collapsible 'Your app credentials' panel. No review, no wait."
+    "note": "Measured once on 2026-10-22. Needs a Slack workspace you belong to (created a free one first, ~2 min). api.slack.com/apps → 'Create new app' is now a 4-step wizard: choose a start (templates 'AI agent' / 'Starter app', 'From a manifest', 'Blank app', or the Slack CLI), name + workspace, pick scopes, finish. On finishing, the dialog says the app 'was created and installed to the selected workspace' and shows the credentials in a collapsible 'Your app credentials' panel. No review, no wait."
   },
   "redirect_uri_rules": {
     "text": "OAuth & Permissions → Redirect URLs. http://localhost:8000/callback was accepted and saved (no HTTPS requirement for localhost). The page states that a URL passed in an OAuth request 'must (partially) match' one of the saved URLs, so matching is prefix-based, not exact. Redirect URLs are only needed to generate the 'Add to Slack' button or to distribute the app.",
