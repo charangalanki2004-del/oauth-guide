@@ -23,11 +23,11 @@
       "recommended_for_agents": true
     }
   ],
-  "registration_access": "workspace_admin",
+  "registration_access": "anyone",
   "registration_access_claim": {
-    "text": "Only users with access to the Google Cloud console for the Workspace project (typically admins) can create OAuth credentials.",
-    "evidence": "sourced",
-    "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    "text": "A personal Google account was enough to create a project, the branding/consent configuration and a web OAuth client. The console offers a free trial but nothing required billing.",
+    "evidence": "tested",
+    "source_url": null
   },
   "prerequisites": [
     {
@@ -82,14 +82,14 @@
   ],
   "approval_gate": "review_for_scopes",
   "approval_claim": {
-    "text": "Sensitive and restricted scopes require additional verification by Google; external apps using such scopes trigger a review process.",
-    "evidence": "sourced",
-    "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    "text": "Verification centre: 'Verification is not required since your app is configured with a testing publishing status.' Audience page: 'Allowed user cap prior to app verification is 100, and is counted over the entire lifetime of the app.' So a new External app starts in Testing, works for listed test users without any review, and verification is the gate for publishing to everyone (and, per Data access, scopes are classed non-sensitive / sensitive / restricted).",
+    "evidence": "tested",
+    "source_url": null
   },
   "unreviewed_limits": {
-    "text": "Before verification, apps can use only non‑sensitive scopes and can be tested with up to 100 test users (internal or added as test users).",
-    "evidence": "sourced",
-    "source_url": "https://developers.google.com/workspace/guides/configure-oauth-consent"
+    "text": "Publishing status 'Testing': only users added as test users can authorise, and the cap before verification is 100 users over the app's entire lifetime (shown as '0 users (0 test, 0 other) / 100 user cap'). 'Publish app' is greyed out until the Branding configuration is complete.",
+    "evidence": "tested",
+    "source_url": null
   },
   "review_artifacts": [
     {
@@ -106,16 +106,16 @@
     "note": "Docs do not specify a timeline for scope verification."
   },
   "setup_time": {
-    "min_minutes": 15,
+    "min_minutes": 13,
     "max_minutes": 60,
-    "evidence": "inferred",
+    "evidence": "tested",
     "source_url": null,
-    "note": "Hands‑on time to configure consent screen and create credentials."
+    "note": "console.cloud.google.com with a personal Gmail account: create a project, then Google Auth Platform (the renamed 'OAuth consent screen') → Create branding, a 4-step wizard (Project configuration: app name + support email; Audience: Internal/External; Contact information; Finish). Then Clients → Create client → Web application → redirect URI → Create; the client ID and secret appear in a dialog with a 'Download JSON' button. About 13 minutes including project creation; no review at this stage."
   },
   "redirect_uri_rules": {
-    "text": "Redirect URIs must be HTTPS (except for localhost during development) and must match exactly one of the URIs entered in the client ID settings.",
-    "evidence": "sourced",
-    "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    "text": "The web client form has separate 'Authorised JavaScript origins' and 'Authorised redirect URIs' lists. http://localhost:8000/callback was accepted as a redirect URI. The form warns: 'It may take five minutes to a few hours for settings to take effect', so a freshly added redirect URI can be rejected at first.",
+    "evidence": "tested",
+    "source_url": null
   },
   "token_lifecycle": {
     "text": "Authorization code exchange returns an access token (typically 1 hour) and a refresh token (long‑lived). Offline access is granted by including access_type=offline. Refresh tokens can be revoked via the console.",
@@ -163,6 +163,24 @@
       "fix": "Switch to HTTPS; only localhost may use HTTP for testing",
       "evidence": "sourced",
       "source_url": "https://developers.google.com/workspace/guides/create-credentials"
+    },
+    {
+      "blocker": "The 'OAuth consent screen' that most docs and tutorials refer to is now 'Google Auth Platform' with Branding / Audience / Clients / Data access / Verification centre pages; menu names in older guides do not match.",
+      "fix": "In the console search box type 'Google Auth Platform', or open console.cloud.google.com/auth/overview with your project selected.",
+      "evidence": "tested",
+      "source_url": null
+    },
+    {
+      "blocker": "Internal audience is only for Google Workspace organisations; a personal account must choose External, which starts in Testing mode with a 100-user lifetime cap.",
+      "fix": "Add each tester's Google account under Audience → Test users; plan verification before you need more than 100 users.",
+      "evidence": "tested",
+      "source_url": null
+    },
+    {
+      "blocker": "A newly created client or newly added redirect URI may not work immediately.",
+      "fix": "Wait; the console states settings can take five minutes to a few hours to take effect.",
+      "evidence": "tested",
+      "source_url": null
     }
   ],
   "agent_can": [
@@ -222,14 +240,39 @@
     "Exact review time for scope verification",
     "Whether a paid tier is required for external app publishing"
   ],
-  "tested_notes": [],
+  "tested_notes": [
+    {
+      "text": "The Create client form has a checkbox 'Use this client for an AI-powered agent': 'Designates this client for AI agents that take actions on behalf of users. Select this if your client uses Google MCP tools. If your application supports both AI agent workflows and standard user features, use separate OAuth clients for each.' None of the docs the agent read mentioned this.",
+      "evidence": "tested",
+      "source_url": null
+    },
+    {
+      "text": "Audience wizard text for External: 'Your app will start in testing mode and will only be available to users that you add to the list of test users. Once your app is ready to push to production, you may need to verify your app.' Internal: 'You will not need to submit your app for verification.'",
+      "evidence": "tested",
+      "source_url": null
+    },
+    {
+      "text": "Data access page groups scopes into non-sensitive and sensitive ('scopes that request access to private user data'); verification requirements follow from which group you request.",
+      "evidence": "tested",
+      "source_url": null
+    },
+    {
+      "text": "Client credentials can be downloaded as JSON (client_secret.json) from the creation dialog and later from Clients.",
+      "evidence": "tested",
+      "source_url": null
+    },
+    {
+      "text": "Corrects the generated guide: the console's own text confirms the 100-user cap is lifetime, not concurrent, and that verification is tied to publishing status, not to creating the client.",
+      "evidence": "tested",
+      "source_url": null
+    }
+  ],
   "confidence": "high",
   "difficulty": {
-    "score": 6.0,
-    "level": 5,
-    "label": "Very hard",
+    "score": 5.0,
+    "level": 4,
+    "label": "Hard",
     "reasons": [
-      "Needs a workspace or org admin to create the app",
       "Some scopes need review before real use",
       "Review requires a security assessment",
       "Token lifecycle has traps"
