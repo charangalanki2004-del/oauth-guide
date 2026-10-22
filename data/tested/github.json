@@ -1,0 +1,29 @@
+{
+  "slug": "github",
+  "tested_on": "2026-10-22",
+  "setup_minutes": 5,
+  "setup_note": "Logged-in personal account → Settings → Developer settings → OAuth Apps → 'Register a new OAuth app'. Four fields (name, homepage URL, optional description, redirect URI) plus three checkboxes. Client ID shown immediately on 'Application created successfully'; client secret via a separate 'Generate a new client secret' button. No review, no waiting, no email.",
+  "registration_access": "anyone",
+  "approval_gate": "none",
+  "registration_access_claim": "Any logged-in GitHub user can register an OAuth App from Settings → Developer settings; no organization, verification or payment needed.",
+  "approval_claim": "The app was usable the moment it was created. The only review-like thing on the page is an optional 'List this application in the Marketplace' button; nothing requires it.",
+  "unreviewed_limits": "No limits shown at creation. The app page shows '0 users' and a 'Revoke all user tokens' control; no test-user cap or scope restrictions were mentioned.",
+  "redirect_uri_rules": "The form allows up to 10 redirect URIs. http://localhost:8000/callback was accepted without any HTTPS warning. An optional 'Allow wildcard matching' checkbox (off by default) extends a URI to subdomains and additional paths; without it, matching is exact.",
+  "token_lifecycle": "Expiring tokens are a per-app option: the 'Expire user access tokens' checkbox is OFF by default. The form says enabling it 'will provide a refresh_token which can be used to request an updated access token when this access token expires'. With it off, tokens do not expire.",
+  "blockers": [
+    {
+      "blocker": "Device flow is off by default; a CLI/agent that uses the device authorization grant gets an error until 'Enable Device Flow' is ticked.",
+      "fix": "Tick 'Enable Device Flow' on the app's settings page (it can be changed after creation)."
+    },
+    {
+      "blocker": "Expecting a refresh_token when 'Expire user access tokens' is off (the default).",
+      "fix": "Tick 'Expire user access tokens' if your agent handles refresh; leave it off if it expects a long-lived token."
+    }
+  ],
+  "notes": [
+    "The form is at github.com/settings/applications/new; the created app lives at github.com/settings/applications/<id> with General, Optional features and Advanced tabs.",
+    "Three checkboxes on the form: 'Allow wildcard matching' (per redirect URI), 'Enable Device Flow', 'Expire user access tokens'. All three are unticked by default.",
+    "No mention anywhere of HTTPS being required, of app verification, or of scope-based review.",
+    "Corrects the generated guide: it claimed one redirect URI per app, exact match only, and (in one run) that expiring tokens are on by default."
+  ]
+}

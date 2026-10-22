@@ -27,8 +27,8 @@ from typing import Callable, Optional
 import httpx
 
 from . import llm, rubric, search
-from .schema import (AgentAttempt, AppType, Blocker, Claim, Evidence, Guide, Source, Step, TimeRange,
-                     WaitRange, slugify)
+from .schema import (AgentAttempt, AppType, ApprovalGate, Blocker, Claim, Evidence, Guide, RegistrationAccess,
+                     Source, Step, TimeRange, WaitRange, slugify)
 
 Progress = Callable[[str, str, Optional[dict]], None]
 
@@ -557,12 +557,12 @@ def merge_tested(g: Guide) -> Guide:
                   "redirect_uri_rules", "token_lifecycle"):
         if field in t and t[field]:
             setattr(g, field, Claim(text=t[field], evidence=Evidence.tested))
-    if "approval_gate" in t:
-        g.approval_gate = t["approval_gate"]
-    if "registration_access" in t:
-        g.registration_access = t["registration_access"]
+    if t.get("approval_gate"):
+        g.approval_gate = ApprovalGate(t["approval_gate"])
+    if t.get("registration_access"):
+        g.registration_access = RegistrationAccess(t["registration_access"])
     for b in t.get("blockers", []):
-        g.blockers.append({"blocker": b["blocker"], "fix": b["fix"], "evidence": "tested"})
+        g.blockers.append(Blocker(blocker=b["blocker"], fix=b.get("fix", ""), evidence=Evidence.tested))
     return g
 
 
